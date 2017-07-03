@@ -1,0 +1,12 @@
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+  TargetRubyVersion: 2.3
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 80
