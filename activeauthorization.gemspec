@@ -6,7 +6,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'active_authorization/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'active_authorization'
+  spec.name          = 'activeauthorization'
   spec.version       = ActiveAuthorization::VERSION
   spec.authors       = ['Marek L']
   spec.email         = ['nospam.keram@gmail.com']
