@@ -10,15 +10,15 @@ module ActiveAuthorization
     class << self
       def search_scope(cls)
         namespaced_authorizations(
-          namespace_combinations(class_ancestors(cls).map(&:name))
+          namespace_combinations(class_ancestors(cls))
         ) | top_level_authorizations
       end
 
       private
 
-      def namespace_combinations(ancestors_names)
-        ancestors_names.flat_map do |anc_name|
-          namespace_words_combinations(anc_name.split(MOD_SEPARATOR))
+      def namespace_combinations(ancestors)
+        ancestors.flat_map do |ancestor|
+          namespace_words_combinations(ancestor.name.split(MOD_SEPARATOR))
         end
       end
 
