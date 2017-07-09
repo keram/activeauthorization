@@ -36,13 +36,13 @@ module ActiveAuthorization
 
       def authorization_instances_for(seeker)
         authorization_roles(seeker).lazy.map do |role|
-          authorization_instance_factory.build(seeker: seeker,
-                                               receiver: self,
-                                               role: role)
+          authorization_factory.build(seeker: seeker,
+                                      receiver: self,
+                                      role: role)
         end
       end
 
-      def authorization_instance_factory
+      def authorization_factory
         Factory.new(authorization_finder)
       end
 
