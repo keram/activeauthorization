@@ -8,9 +8,9 @@ module ActiveAuthorization
     TOP_LEVEL_RE = /\A(\w+\:\:)?Authorizations\:\:\w+Authorization\z/
 
     class << self
-      def search_scope(ancestors)
+      def search_scope(cls)
         namespaced_authorizations(
-          namespace_combinations(ancestors.map(&:name))
+          namespace_combinations(class_ancestors(cls).map(&:name))
         ) | top_level_authorizations
       end
 
@@ -44,13 +44,17 @@ module ActiveAuthorization
           TOP_LEVEL_RE.match?(auth.name)
         end
       end
+
+      def class_ancestors(cls)
+        cls
+          .ancestors
+          .select { |ancestor| ancestor.is_a? Class }
+          .reject { |ancestor| [Object, BasicObject].include? ancestor }
+      end
     end
 
     def initialize(receiver_class)
-      @search_scope =
-        self.class.search_scope(
-          ActiveAuthorization.class_ancestors(receiver_class)
-        )
+      @search_scope = self.class.search_scope(receiver_class)
     end
 
     def find(class_name)

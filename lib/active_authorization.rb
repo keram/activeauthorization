@@ -10,10 +10,4 @@ require 'active_authorization/policy'
 require 'active_authorization/concern'
 
 module ActiveAuthorization
-  def self.class_ancestors(cls)
-    cls
-      .ancestors
-      .select { |ancestor| ancestor.is_a? Class }
-      .reject { |ancestor| [Object, BasicObject].include? ancestor }
-  end
 end
