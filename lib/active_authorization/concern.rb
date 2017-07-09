@@ -8,7 +8,6 @@ module ActiveAuthorization
     def self.included(klass)
       klass.extend ClassMethods
       klass.include InstanceMethods
-      ActiveAuthorization.preload_authorizations
     end
   end
 end

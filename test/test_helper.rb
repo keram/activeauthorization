@@ -29,3 +29,9 @@ User = Struct.new(:roles)
 def current_user
   User.new(['Customer'])
 end
+
+$LOAD_PATH
+  .select { |path| Dir.exist? File.join(path, 'authorizations') }
+  .map { |path| File.join(path, 'authorizations', '**', '*.rb') }
+  .flat_map { |path| Dir.glob(path) }
+  .each { |file| require(file) }

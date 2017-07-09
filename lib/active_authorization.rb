@@ -16,12 +16,4 @@ module ActiveAuthorization
       .select { |ancestor| ancestor.is_a? Class }
       .reject { |ancestor| [Object, BasicObject].include? ancestor }
   end
-
-  def self.preload_authorizations
-    $LOAD_PATH
-      .select { |path| Dir.exist? File.join(path, 'authorizations') }
-      .map { |path| File.join(path, 'authorizations', '**', '*.rb') }
-      .flat_map { |path| Dir.glob(path) }
-      .each { |file| require(file) }
-  end
 end
