@@ -13,8 +13,8 @@ module ActiveAuthorization
               self.class.name
       end
 
-      def authorization_finder
-        Finder.new(self.class)
+      def authorization_factory
+        Factory.new(Finder.new(self.class))
       end
     end
   end
