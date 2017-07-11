@@ -4,7 +4,10 @@ module ActiveAuthorization
   module Concern
     module ClassMethods
       def authorized?(seeker:, message_name:)
-        authorization_instances_for(seeker)
+        authorization_instances_for(
+          seeker: seeker,
+          roles: authorization_roles(seeker)
+        )
           .any? { |authorization| authorization.authorized?(message_name) }
       end
 
@@ -34,8 +37,8 @@ module ActiveAuthorization
               name
       end
 
-      def authorization_instances_for(seeker)
-        authorization_roles(seeker).lazy.map do |role|
+      def authorization_instances_for(seeker:, roles:)
+        roles.lazy.map do |role|
           authorization_factory
             .build(seeker: seeker,
                    receiver: self,
