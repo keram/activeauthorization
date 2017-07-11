@@ -4,11 +4,11 @@ module ActiveAuthorization
   module Concern
     module ClassMethods
       def authorized?(seeker:, message_name:)
-        authorization_instances_for(
-          seeker: seeker,
-          roles: authorization_roles(seeker)
-        )
-          .any? { |authorization| authorization.authorized?(message_name) }
+        authorization_roles(seeker).any? do |role|
+          Factory.new(Finder.new(self))
+                 .build(seeker: seeker, receiver: self, role: role)
+                 .authorized?(message_name)
+        end
       end
 
       def authorize!(seeker:, message_name:)
@@ -35,19 +35,6 @@ module ActiveAuthorization
         raise NotImplemented,
               'The method `authorization_roles` needs to be implemented in ' +
               name
-      end
-
-      def authorization_instances_for(seeker:, roles:)
-        roles.lazy.map do |role|
-          authorization_factory
-            .build(seeker: seeker,
-                   receiver: self,
-                   role: role)
-        end
-      end
-
-      def authorization_factory
-        Factory.new(Finder.new(self))
       end
     end
   end
