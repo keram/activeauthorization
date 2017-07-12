@@ -2,7 +2,7 @@
 
 module ActiveAuthorization
   class Finder
-    FALLBACK = Authorization
+    FALLBACK = -> { Authorization }
     AUTH_MOD_PREFIX = 'Authorizations::'
     MOD_SEPARATOR = '::'
     TOP_LEVEL_RE = /\A(\w+\:\:)?Authorizations\:\:\w+Authorization\z/
@@ -58,11 +58,7 @@ module ActiveAuthorization
     end
 
     def find(class_name)
-      select(class_name).push(FALLBACK).first
-    end
-
-    def select(class_name)
-      @search_scope.select { |cls| cls.name.include?(class_name) }
+      @search_scope.detect(FALLBACK) { |cls| cls.name.include?(class_name) }
     end
   end
 end
