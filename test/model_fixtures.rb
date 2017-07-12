@@ -21,7 +21,7 @@ end
 
 module Some
   module Nested
-    class ExtendedObject
+    class AuthorizableObject
       include ActiveAuthorization::Authorizable
 
       def self.authorization_roles(seeker:)

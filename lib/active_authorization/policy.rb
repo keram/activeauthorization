@@ -38,8 +38,7 @@ module ActiveAuthorization
 
     def authorization_roles(*)
       raise NotImplemented,
-            'The method `authorization_roles` needs to be implemented in ' +
-            self.class.name
+            'The method `authorization_roles(seeker:)` not implemented.'
     end
 
     def authorizations(receiver)

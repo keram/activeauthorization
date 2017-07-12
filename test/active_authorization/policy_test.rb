@@ -6,7 +6,7 @@ module ActiveAuthorization
   class AuthorizationRolesMissingPolicy < Policy
   end
 
-  class AuthorizableedObjectPolicy < Policy
+  class AuthorizableObjectPolicy < Policy
     # :reek:UtilityFunction:
     def authorization_roles(seeker:)
       seeker.roles
@@ -15,17 +15,7 @@ module ActiveAuthorization
 
   module Some
     module Nested
-      class ExtendedObjectPolicy < Policy
-        def authorization_roles(seeker:)
-          seeker.roles
-        end
-      end
-    end
-  end
-
-  module Some
-    module Nested
-      class IncludedObjectPolicy < Policy
+      class AuthorizableObjectPolicy < Policy
         def authorization_roles(seeker:)
           seeker.roles
         end
@@ -35,8 +25,7 @@ module ActiveAuthorization
 
   class PolicyTest < Minitest::Test
     def test_that_seeker_can_not_have_a_cake
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -46,8 +35,7 @@ module ActiveAuthorization
     end
 
     def test_that_seeker_can_make_a_tea
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -57,8 +45,8 @@ module ActiveAuthorization
     end
 
     def test_nested
-      receiver = ::Some::Nested::IncludedObject.new
-      policy = Some::Nested::IncludedObjectPolicy.new(
+      receiver = ::Some::Nested::AuthorizableObject.new
+      policy = Some::Nested::AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -68,8 +56,8 @@ module ActiveAuthorization
     end
 
     def test_multiple_roles
-      receiver = ::Some::Nested::IncludedObject.new
-      policy = Some::Nested::IncludedObjectPolicy.new(
+      receiver = ::Some::Nested::AuthorizableObject.new
+      policy = Some::Nested::AuthorizableObjectPolicy.new(
         seeker: User.new(%w[Visitor Customer Moderator]),
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -78,9 +66,8 @@ module ActiveAuthorization
                                 message_name: authorized_action)
     end
 
-    def test_without_role_implementation_raises_exception
-      receiver = ::Some::Nested::IncludedObject.new
-      policy = Policy.new(
+    def test_without_authorization_roles_implementation
+      policy = AuthorizationRolesMissingPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -91,8 +78,7 @@ module ActiveAuthorization
     end
 
     def test_authorize_bang_prohibited_action
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -104,8 +90,7 @@ module ActiveAuthorization
     end
 
     def test_authorize_bang_authorized_action
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -115,8 +100,7 @@ module ActiveAuthorization
     end
 
     def test_authorize_prohibited_action
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -128,8 +112,7 @@ module ActiveAuthorization
     end
 
     def test_authorize_authorized_action
-      receiver = ::AuthorizableedObject.new
-      policy = AuthorizableedObjectPolicy.new(
+      policy = AuthorizableObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -139,6 +122,10 @@ module ActiveAuthorization
                      receiver: receiver,
                      message_name: authorized_action
                    ) { 'aaaa' }
+    end
+
+    def receiver
+      ::AuthorizableObject.new
     end
 
     def authorized_action
