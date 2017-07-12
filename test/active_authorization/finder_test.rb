@@ -23,5 +23,12 @@ module ActiveAuthorization
 
       assert_equal Authorization, finder.find('NonExistantAuthorization')
     end
+
+    def test_find_in_top_level
+      finder = Finder.new(::AuthorizableSubObject)
+
+      assert_equal ::Authorizations::ManagerAuthorization,
+                   finder.find('ManagerAuthorization')
+    end
   end
 end
