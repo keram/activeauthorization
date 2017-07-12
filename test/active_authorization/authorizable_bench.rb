@@ -6,10 +6,10 @@ module ActiveAuthorization
   class AuthorizableBenchmark < Minitest::Benchmark
     TRESHOLD = 0.999
 
-    subjects = ['AuthorizableedObject.new',
-                'AuthorizableedSubObject.new',
-                'AuthorizableedObject',
-                'AuthorizableedSubObject']
+    subjects = ['AuthorizableObject.new',
+                'AuthorizableSubObject.new',
+                'AuthorizableObject',
+                'AuthorizableSubObject']
 
     # rubocop: disable Metrics/BlockLength
     subjects.each_with_index do |sub, index|

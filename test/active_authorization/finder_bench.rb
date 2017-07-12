@@ -5,7 +5,7 @@ require 'test_helper'
 module Dummy
   module Other
     module Nested
-      class TestReceiver < Some::Nested::ExtendedObject
+      class TestReceiver < Some::Nested::AuthorizableObject
       end
     end
   end
