@@ -2,7 +2,7 @@
 
 module ActiveAuthorization
   module Authorizations
-    module ConcernedSubObject
+    module AuthorizableedSubObject
       class AdminAuthorization < Authorization
       end
     end

@@ -43,7 +43,7 @@ module ActiveAuthorization
     end
 
     def authorizations(receiver)
-      authorization_roles(seeker).lazy.map do |role|
+      authorization_roles(seeker: seeker).lazy.map do |role|
         factory
           .build(seeker: seeker, receiver: receiver, role: role)
       end

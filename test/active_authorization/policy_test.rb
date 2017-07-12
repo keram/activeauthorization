@@ -6,9 +6,9 @@ module ActiveAuthorization
   class AuthorizationRolesMissingPolicy < Policy
   end
 
-  class ConcernedObjectPolicy < Policy
+  class AuthorizableedObjectPolicy < Policy
     # :reek:UtilityFunction:
-    def authorization_roles(seeker)
+    def authorization_roles(seeker:)
       seeker.roles
     end
   end
@@ -16,7 +16,7 @@ module ActiveAuthorization
   module Some
     module Nested
       class ExtendedObjectPolicy < Policy
-        def authorization_roles(seeker)
+        def authorization_roles(seeker:)
           seeker.roles
         end
       end
@@ -26,7 +26,7 @@ module ActiveAuthorization
   module Some
     module Nested
       class IncludedObjectPolicy < Policy
-        def authorization_roles(seeker)
+        def authorization_roles(seeker:)
           seeker.roles
         end
       end
@@ -35,8 +35,8 @@ module ActiveAuthorization
 
   class PolicyTest < Minitest::Test
     def test_that_seeker_can_not_have_a_cake
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -46,8 +46,8 @@ module ActiveAuthorization
     end
 
     def test_that_seeker_can_make_a_tea
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -91,8 +91,8 @@ module ActiveAuthorization
     end
 
     def test_authorize_bang_prohibited_action
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -104,8 +104,8 @@ module ActiveAuthorization
     end
 
     def test_authorize_bang_authorized_action
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -115,8 +115,8 @@ module ActiveAuthorization
     end
 
     def test_authorize_prohibited_action
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
@@ -128,8 +128,8 @@ module ActiveAuthorization
     end
 
     def test_authorize_authorized_action
-      receiver = ::ConcernedObject.new
-      policy = ConcernedObjectPolicy.new(
+      receiver = ::AuthorizableedObject.new
+      policy = AuthorizableedObjectPolicy.new(
         seeker: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )

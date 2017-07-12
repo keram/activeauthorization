@@ -7,7 +7,7 @@ require 'active_authorization/authorization'
 require 'active_authorization/finder'
 require 'active_authorization/factory'
 require 'active_authorization/policy'
-require 'active_authorization/concern'
+require 'active_authorization/authorizable'
 
 module ActiveAuthorization
 end

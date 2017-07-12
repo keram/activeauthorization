@@ -5,20 +5,22 @@ require 'test_helper'
 module ActiveAuthorization
   class FactoryTest < Minitest::Test
     def test_build_auth_in_parent_namespace
-      finder = Finder.new(ConcernedSubObject)
+      finder = Finder.new(AuthorizableedSubObject)
       factory = Factory.new(finder)
-      assert_instance_of Authorizations::ConcernedObject::CustomerAuthorization,
+      expected = Authorizations::AuthorizableedObject::CustomerAuthorization
+      assert_instance_of expected,
                          factory.build(seeker: current_user,
-                                       receiver: ConcernedSubObject,
+                                       receiver: AuthorizableedSubObject,
                                        role: current_user.roles.first)
     end
 
     def test_build_auth_in_receiver_module_namespace
-      finder = Finder.new(ConcernedSubObject)
+      finder = Finder.new(AuthorizableedSubObject)
       factory = Factory.new(finder)
-      assert_instance_of Authorizations::ConcernedSubObject::AdminAuthorization,
+      expected = Authorizations::AuthorizableedSubObject::AdminAuthorization
+      assert_instance_of expected,
                          factory.build(seeker: current_user,
-                                       receiver: ConcernedSubObject,
+                                       receiver: AuthorizableedSubObject,
                                        role: 'Admin')
     end
 
@@ -27,7 +29,8 @@ module ActiveAuthorization
       factory = Factory.new(finder)
 
       user = User.new(['Vigilante'])
-      assert_instance_of Authorizations::Some::Nested::VigilanteAuthorization,
+      expected = Authorizations::Some::Nested::VigilanteAuthorization
+      assert_instance_of expected,
                          factory.build(seeker: user,
                                        receiver: ::Some::Nested::ExtendedObject,
                                        role: user.roles.first)

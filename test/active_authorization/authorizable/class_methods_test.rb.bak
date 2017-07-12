@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module ActiveAuthorization
-  module Concern
+  module Authorizable
     class ClassMethodsTest < Minitest::Test
       def subject
         ::ExtendedObject

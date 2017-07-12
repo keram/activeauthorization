@@ -16,6 +16,6 @@ module ActiveAuthorization
   class PolicyAccessDenied < AccessDenied
   end
 
-  class ConcernAccessDenied < AccessDenied
+  class AuthorizableAccessDenied < AccessDenied
   end
 end

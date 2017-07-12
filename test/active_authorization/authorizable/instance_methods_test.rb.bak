@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'active_authorization/concern/class_methods_test'
+require 'active_authorization/authorizable/class_methods_test'
 
 module ActiveAuthorization
-  module Concern
+  module Authorizable
     class InstanceMethodsTest < ClassMethodsTest
       def subject
         ::IncludedObject.new

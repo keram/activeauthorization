@@ -12,14 +12,14 @@ module ActiveAuthorization
     end
 
     def test_find_in_parent_class
-      finder = Finder.new(::ConcernedSubObject)
+      finder = Finder.new(::AuthorizableedSubObject)
 
-      assert_equal Authorizations::ConcernedObject::CustomerAuthorization,
+      assert_equal Authorizations::AuthorizableedObject::CustomerAuthorization,
                    finder.find('CustomerAuthorization')
     end
 
     def test_fallback
-      finder = Finder.new(::ConcernedSubObject)
+      finder = Finder.new(::AuthorizableedSubObject)
 
       assert_equal Authorization, finder.find('NonExistantAuthorization')
     end
