@@ -3,15 +3,14 @@
 module ActiveAuthorization
   class Finder
     FALLBACK = -> { Authorization }
-    AUTH_MOD_PREFIX = 'Authorizations::'
     MOD_SEPARATOR = '::'
-    TOP_LEVEL_RE = /\A(\w+\:\:)?Authorizations\:\:\w+Authorization\z/
 
     class << self
       def search_scope(cls)
         namespaced_authorizations(
-          namespace_combinations(class_ancestors(cls))
-        ) | top_level_authorizations
+          namespace_combinations(class_ancestors(cls)),
+          Authorizations.list
+        )
       end
 
       private
@@ -33,23 +32,20 @@ module ActiveAuthorization
       def namespace_words_combinations(words)
         [].tap do |ary|
           words.length.times do |wi|
-            ary.push(
-              words.slice(0..(-1 * (wi + 1))).join(MOD_SEPARATOR)
-            )
+            ary.push(words.slice(0..(-1 * (wi + 1))))
           end
         end
       end
 
-      def namespaced_authorizations(namespace_combinations)
-        namespace_combinations.flat_map do |path|
-          pref_path = AUTH_MOD_PREFIX.dup.concat(path)
-          Authorizations.list.select { |auth| auth.name.include?(pref_path) }
+      def namespaced_authorizations(namespace_combinations, auth_list)
+        tree = auth_list.map do |auth|
+          auth.name.split(MOD_SEPARATOR).slice(1...-1)
         end
-      end
 
-      def top_level_authorizations
-        Authorizations.list.select do |auth|
-          TOP_LEVEL_RE.match?(auth.name)
+        namespace_combinations.push([]).flat_map do |words|
+          auth_list.select.with_index do |_auth, index|
+            tree[index].eql?(words)
+          end
         end
       end
 
