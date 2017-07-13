@@ -3,9 +3,9 @@
 module ActiveAuthorization
   module Authorizable
     def self.included(klass)
-      klass.class_eval do
-        klass.extend Authorizable
+      klass.extend Authorizable
 
+      klass.class_eval do
         def authorization_factory
           self.class.authorization_factory
         end

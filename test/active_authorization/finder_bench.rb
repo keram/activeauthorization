@@ -33,14 +33,14 @@ module ActiveAuthorization
     TRESHOLD = 0.9999
 
     def self.create_authorization_class(auth_cls_name)
-      Authorizations.module_eval("class #{auth_cls_name}; end")
-      Authorizations.module_eval(auth_cls_name.to_s)
+      ::Authorizations.module_eval("class #{auth_cls_name}; end")
+      ::Authorizations.module_eval(auth_cls_name.to_s)
     end
 
-    Authorizations.module_eval('module Dummy; module Other; end; end')
-    Authorizations.module_eval('module Another; module Thor; end; end')
+    ::Authorizations.module_eval('module Dummy; module Other; end; end')
+    ::Authorizations.module_eval('module Another; module Thor; end; end')
 
-    @auths_original = Authorizations.list
+    @auths_original = ActiveAuthorization.list
     @auths = bench_range.each_with_object({}) do |range_size, acc|
       acc[range_size.to_s] = []
       range_size.times do |nth|
@@ -60,19 +60,19 @@ module ActiveAuthorization
     end
 
     def teardown
-      Authorizations.list = self.class.auths_original
+      ActiveAuthorization.list = self.class.auths_original
     end
 
     def bench_initialize
       assert_performance_constant TRESHOLD do |range_size|
-        Authorizations.list = auths[range_size.to_s]
+        ActiveAuthorization.list = auths[range_size.to_s]
         Finder.new(receiver_class)
       end
     end
 
     def bench_find_top_level_authorization
       assert_performance_constant TRESHOLD do |range_size|
-        Authorizations.list = auths[range_size.to_s]
+        ActiveAuthorization.list = auths[range_size.to_s]
         finder = Finder.new(receiver_class)
         finder.find("TopFake#{(range_size - 1)}Authorization")
       end
@@ -80,7 +80,7 @@ module ActiveAuthorization
 
     def bench_find_non_exist_authorization
       assert_performance_constant TRESHOLD do |range_size|
-        Authorizations.list = auths[range_size.to_s]
+        ActiveAuthorization.list = auths[range_size.to_s]
         finder = Finder.new(receiver_class)
         finder.find("NonExist#{range_size}Authorization")
       end
@@ -88,7 +88,7 @@ module ActiveAuthorization
 
     def bench_find_namespaced_authorization
       assert_performance_constant TRESHOLD do |range_size|
-        Authorizations.list = auths[range_size.to_s]
+        ActiveAuthorization.list = auths[range_size.to_s]
         finder = Finder.new(receiver_class)
         finder.find("Fake#{(range_size - 1)}Authorization")
       end

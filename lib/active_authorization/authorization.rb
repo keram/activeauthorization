@@ -14,7 +14,7 @@ module ActiveAuthorization
     )
 
     def self.inherited(other)
-      Authorizations.list.push(other)
+      ActiveAuthorization.list.push(other)
     end
     private_class_method :inherited
 

@@ -9,7 +9,7 @@ module ActiveAuthorization
       def search_scope(cls)
         namespaced_authorizations(
           namespace_combinations(class_ancestors(cls)),
-          Authorizations.list
+          ActiveAuthorization.list
         )
       end
 
