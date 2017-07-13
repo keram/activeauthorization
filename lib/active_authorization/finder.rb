@@ -37,15 +37,18 @@ module ActiveAuthorization
         end
       end
 
-      def namespaced_authorizations(namespace_combinations, auth_list)
-        tree = auth_list.map do |auth|
-          auth.name.split(MOD_SEPARATOR).slice(1...-1)
+      def namespaced_authorizations(namespace_combinations, list)
+        hash_tree = {}
+        list.each do |cls|
+          hash_tree[cls.name.split(MOD_SEPARATOR).slice(1...-1)] = []
+        end
+
+        list.each do |cls|
+          hash_tree[cls.name.split(MOD_SEPARATOR).slice(1...-1)].push(cls)
         end
 
         namespace_combinations.push([]).flat_map do |words|
-          auth_list.select.with_index do |_auth, index|
-            tree[index].eql?(words)
-          end
+          hash_tree.fetch(words, [])
         end
       end
 
