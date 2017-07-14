@@ -9,11 +9,19 @@ module ActiveAuthorization
       def search_scope(cls)
         namespaced_authorizations(
           namespace_combinations(class_ancestors(cls)),
-          ActiveAuthorization.list
+          hash_tree(ActiveAuthorization.list)
         )
       end
 
       private
+
+      def hash_tree(list)
+        Hash.new { |hash, key| hash[key] = [] }.tap do |tree|
+          list.each do |cls|
+            tree[cls.name.split(MOD_SEPARATOR).slice(1...-1)].push(cls)
+          end
+        end
+      end
 
       def namespace_combinations(ancestors)
         ancestors.flat_map do |ancestor|
@@ -37,18 +45,9 @@ module ActiveAuthorization
         end
       end
 
-      def namespaced_authorizations(namespace_combinations, list)
-        hash_tree = {}
-        list.each do |cls|
-          hash_tree[cls.name.split(MOD_SEPARATOR).slice(1...-1)] = []
-        end
-
-        list.each do |cls|
-          hash_tree[cls.name.split(MOD_SEPARATOR).slice(1...-1)].push(cls)
-        end
-
+      def namespaced_authorizations(namespace_combinations, tree)
         namespace_combinations.push([]).flat_map do |words|
-          hash_tree.fetch(words, [])
+          tree[words]
         end
       end
 
