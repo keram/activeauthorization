@@ -3,6 +3,7 @@
 module ActiveAuthorization
   class Authorization
     DEFAULT_STATUS = false
+    MOD_SEPARATOR = '::'
     CHECK_METHOD_PREFIX = 'can_'
     CHECK_METHOD_SUFFIX = '?'
     CHECK_METHOD_REGEXP = Regexp.compile(
@@ -14,7 +15,8 @@ module ActiveAuthorization
     )
 
     def self.inherited(other)
-      ActiveAuthorization.list.push(other)
+      ActiveAuthorization.tree[other.name.split(MOD_SEPARATOR).slice(1...-1)]
+                         .push(other)
     end
     private_class_method :inherited
 

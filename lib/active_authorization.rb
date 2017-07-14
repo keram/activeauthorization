@@ -9,13 +9,13 @@ require 'active_authorization/policy'
 require 'active_authorization/authorizable'
 
 module ActiveAuthorization
-  def self.list=(arry)
-    @list = arry
+  def self.tree=(hash)
+    @tree = hash
   end
 
-  def self.list
-    @list
+  def self.tree
+    @tree
   end
 
-  self.list = []
+  self.tree = Hash.new { |hash, key| hash[key] = [] }
 end
