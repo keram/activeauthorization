@@ -7,10 +7,9 @@ module ActiveAuthorization
 
     class << self
       def search_scope(cls)
-        namespaced_authorizations(
-          namespace_combinations(class_ancestors(cls)),
-          hash_tree(ActiveAuthorization.list)
-        )
+        tree = hash_tree(ActiveAuthorization.list)
+        namespace_combinations(class_ancestors(cls))
+          .push([]).flat_map { |words| tree[words] }
       end
 
       private
@@ -42,12 +41,6 @@ module ActiveAuthorization
           words.length.times do |wi|
             ary.push(words.slice(0..(-1 * (wi + 1))))
           end
-        end
-      end
-
-      def namespaced_authorizations(namespace_combinations, tree)
-        namespace_combinations.push([]).flat_map do |words|
-          tree[words]
         end
       end
 
