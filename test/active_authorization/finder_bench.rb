@@ -30,7 +30,7 @@ module ActiveAuthorization
   end
 
   class FinderBenchmark < Minitest::Benchmark
-    TRESHOLD = 0.9999
+    TRESHOLD = 0.99999
 
     def self.create_authorization_class(auth_cls_name)
       ::Authorizations.module_eval("class #{auth_cls_name}; end")

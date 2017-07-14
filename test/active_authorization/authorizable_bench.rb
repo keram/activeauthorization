@@ -4,7 +4,7 @@ require 'test_helper'
 
 module ActiveAuthorization
   class AuthorizableBenchmark < Minitest::Benchmark
-    TRESHOLD = 0.999
+    TRESHOLD = 0.9999
 
     subjects = ['AuthorizableObject.new',
                 'AuthorizableSubObject.new',
