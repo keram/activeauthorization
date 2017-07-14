@@ -2,104 +2,55 @@
 
 require 'test_helper'
 
-module Dummy
-  module Other
-    module Nested
-      class TestReceiver < Some::Nested::AuthorizableObject
-      end
-    end
-  end
-end
-
 module ActiveAuthorization
-  class FakeAuthorization
-    def self.new(cls_name)
-      @name = Finder::AUTH_MOD_PREFIX
-              .dup.concat(cls_name)
-
-      super()
-    end
-
-    class << self
-      attr_reader :name
-    end
-
-    def name
-      self.class.name
-    end
-  end
-
   class FinderBenchmark < Minitest::Benchmark
-    TRESHOLD = 0.99999
+    TRESHOLD = 0.999
+    module DummyReceivers; end
+    module DummyAuthorizations; end
 
-    def self.create_authorization_class(auth_cls_name)
-      ::Authorizations.module_eval("class #{auth_cls_name}; end")
-      ::Authorizations.module_eval(auth_cls_name.to_s)
-    end
+    @original_tree = ActiveAuthorization.tree
 
-    ::Authorizations.module_eval('module Dummy; module Other; end; end')
-    ::Authorizations.module_eval('module Another; module Thor; end; end')
-
-    @auths_original = ActiveAuthorization.list
-    @auths = bench_range.each_with_object({}) do |range_size, acc|
-      acc[range_size.to_s] = []
-      range_size.times do |nth|
-        [
-          "Dummy::Other::Fake#{nth}Authorization",
-          "Another::Thor::Exclude#{nth}Authorization",
-          "TopFake#{nth}Authorization"
-        ].each do |auth_name|
-          acc[range_size.to_s].push(create_authorization_class(auth_name))
-        end
+    def self.generate_dummy_receiver(name, depth)
+      depth.times do |level|
+        cls_path = Array.new(level, name).push(name).join('::')
+        DummyReceivers.module_eval("class #{cls_path}; end;")
       end
+
+      DummyReceivers.module_eval(Array.new(depth, name).join('::'))
     end
+
+    @dummy_receivers = {
+      1 => generate_dummy_receiver('Lorem', 1),
+      10 => generate_dummy_receiver('Ipsum', 2),
+      100 => generate_dummy_receiver('Dolor', 10),
+      1000 => generate_dummy_receiver('Sit', 100),
+      10_000 => generate_dummy_receiver('Amet', 1_000)
+    }
 
     class << self
-      attr_reader :auths
-      attr_reader :auths_original
+      attr_reader :dummy_trees
+      attr_reader :dummy_receivers
+      attr_reader :original_tree
     end
 
     def teardown
-      ActiveAuthorization.list = self.class.auths_original
+      ActiveAuthorization.instance_variable_set('@tree',
+                                                self.class.original_tree)
     end
 
     def bench_initialize
-      assert_performance_constant TRESHOLD do |range_size|
-        ActiveAuthorization.list = auths[range_size.to_s]
-        Finder.new(receiver_class)
+      assert_performance_constant 0.9999 do |range_size|
+        Finder.new(self.class.dummy_receivers[range_size])
       end
     end
 
-    def bench_find_top_level_authorization
-      assert_performance_constant TRESHOLD do |range_size|
-        ActiveAuthorization.list = auths[range_size.to_s]
-        finder = Finder.new(receiver_class)
-        finder.find("TopFake#{(range_size - 1)}Authorization")
-      end
-    end
+    # def bench_find_top_level_authorization
+    # end
 
-    def bench_find_non_exist_authorization
-      assert_performance_constant TRESHOLD do |range_size|
-        ActiveAuthorization.list = auths[range_size.to_s]
-        finder = Finder.new(receiver_class)
-        finder.find("NonExist#{range_size}Authorization")
-      end
-    end
+    # def bench_find_non_exist_authorization
+    # end
 
-    def bench_find_namespaced_authorization
-      assert_performance_constant TRESHOLD do |range_size|
-        ActiveAuthorization.list = auths[range_size.to_s]
-        finder = Finder.new(receiver_class)
-        finder.find("Fake#{(range_size - 1)}Authorization")
-      end
-    end
-
-    def receiver_class
-      Dummy::Other::Nested::TestReceiver
-    end
-
-    def auths
-      self.class.auths
-    end
+    # def bench_find_namespaced_authorization
+    # end
   end
 end
