@@ -2,7 +2,6 @@
 
 module ActiveAuthorization
   class Authorization
-    DEFAULT_STATUS = false
     MOD_SEPARATOR = '::'
     FALLBACK = -> { :default_status }
 
@@ -44,7 +43,7 @@ module ActiveAuthorization
     attr_reader :seeker, :receiver
 
     def default_status
-      DEFAULT_STATUS
+      false
     end
 
     def responding_method(message_name)
