@@ -8,6 +8,7 @@ require 'active_authorization/factory'
 require 'active_authorization/policy'
 require 'active_authorization/authorizable'
 
+# Main namespace of the gem
 module ActiveAuthorization
   # Add authorization class to list of all auth classes.
   # It is automatically called when class inherits
