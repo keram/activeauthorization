@@ -5,19 +5,19 @@ module Authorizations
     module Nested
       module AuthorizableObject
         class GuestAuthorization < ActiveAuthorization::Authorization
-          def can_make_a_tea?
+          def make_a_tea?
             false
           end
         end
 
         class CustomerAuthorization < ActiveAuthorization::Authorization
-          def can_make_a_tea?
+          def make_a_tea?
             true
           end
         end
 
         class ModeratortAuthorization < ActiveAuthorization::Authorization
-          def can_make_a_tea?
+          def make_a_tea?
             true
           end
         end

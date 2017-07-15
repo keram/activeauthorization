@@ -16,7 +16,7 @@ module ActiveAuthorization
       auth = authorization
 
       auth.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-        def can_#{authorized_action}?
+        def #{authorized_action}?
           true
         end
       RUBY
@@ -34,7 +34,7 @@ module ActiveAuthorization
       auth = authorization
 
       auth.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-        def can_#{authorized_action}?
+        def #{authorized_action}?
           true
         end
       RUBY
@@ -50,7 +50,7 @@ module ActiveAuthorization
       auth = authorization
 
       auth.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-        def can_#{authorized_action}?
+        def #{authorized_action}?
           true
         end
       RUBY

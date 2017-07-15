@@ -4,11 +4,11 @@ module Authorizations
   module Some
     module Nested
       class VigilanteAuthorization < ActiveAuthorization::Authorization
-        def can_make_a_tea?
+        def make_a_tea?
           false
         end
 
-        def can_swear?
+        def swear?
           true
         end
       end

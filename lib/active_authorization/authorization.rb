@@ -7,11 +7,7 @@ module ActiveAuthorization
     CHECK_METHOD_PREFIX = 'can_'
     CHECK_METHOD_SUFFIX = '?'
     CHECK_METHOD_REGEXP = Regexp.compile(
-      '\A'.dup
-      .concat(Regexp.quote(CHECK_METHOD_PREFIX))
-      .concat('[a-z]+[a-z_]+[^_]')
-      .concat(Regexp.quote(CHECK_METHOD_SUFFIX))
-      .concat('\z')
+      Regexp.quote(CHECK_METHOD_SUFFIX)
     )
 
     def self.inherited(other)
@@ -25,9 +21,7 @@ module ActiveAuthorization
     end
 
     def self.check_method_name(message_name)
-      CHECK_METHOD_PREFIX.dup
-                         .concat(message_name)
-                         .concat(CHECK_METHOD_SUFFIX)
+      message_name.dup.concat(CHECK_METHOD_SUFFIX)
     end
 
     def initialize(seeker:, receiver:)
