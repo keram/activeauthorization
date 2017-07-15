@@ -105,10 +105,10 @@ module ActiveAuthorization
         factory: Factory.new(Finder.new(receiver.class))
       )
 
-      assert_nil policy.authorize(
+      policy.authorize(
         receiver: receiver,
         message_name: prohibited_action
-      ) { 'aaaa' }
+      ) { raise }
     end
 
     def test_authorize_authorized_action

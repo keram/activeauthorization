@@ -25,9 +25,9 @@ module ActiveAuthorization
 
     def authorize(receiver:, message_name:)
       {
-        true => yield,
-        false => nil
-      }[authorized?(receiver: receiver, message_name: message_name)]
+        true => -> { yield },
+        false => -> {}
+      }[authorized?(receiver: receiver, message_name: message_name)].call
     end
 
     private

@@ -41,9 +41,9 @@ module ActiveAuthorization
     # @return [nil, *] nil or content of the block passed in
     def authorize(message_name)
       {
-        true => yield,
-        false => nil
-      }[authorized?(message_name)]
+        true => -> { yield },
+        false => -> {}
+      }[authorized?(message_name)].call
     end
 
     private

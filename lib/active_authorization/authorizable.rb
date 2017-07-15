@@ -109,9 +109,9 @@ module ActiveAuthorization
     # @return [nil, *] nil or content of the block passed in
     def authorize(seeker:, message_name:)
       {
-        true => yield,
-        false => nil
-      }[authorized?(seeker: seeker, message_name: message_name)]
+        true => -> { yield },
+        false => -> {}
+      }[authorized?(seeker: seeker, message_name: message_name)].call
     end
 
     protected

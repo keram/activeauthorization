@@ -38,6 +38,17 @@ module ActiveAuthorization
       end
     end
 
+    def test_authorize
+      [AuthorizableObject, AuthorizableObject.new].each do |subject|
+        subject.authorize(seeker: current_user,
+                          message_name: prohibited_action) { raise }
+
+        assert_equal 'a',
+                     subject.authorize(seeker: current_user,
+                                       message_name: authorized_action) { 'a' }
+      end
+    end
+
     def authorized_action
       'make_a_tea'
     end

@@ -47,7 +47,7 @@ module ActiveAuthorization
     end
 
     def test_authorize_prohibited_action
-      assert_nil authorization.authorize(prohibited_action) { 'aaa' }
+      authorization.authorize(prohibited_action) { raise }
     end
 
     def test_authorize_authorized_action
