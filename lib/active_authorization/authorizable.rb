@@ -107,9 +107,9 @@ module ActiveAuthorization
     # @param message_name [String] The message to be send to the receiver
     # @param block [Proc]
     # @return [nil, *] nil or content of the block passed in
-    def authorize(seeker:, message_name:)
+    def authorize(seeker:, message_name:, &block)
       {
-        true => -> { yield },
+        true => block,
         false => -> {}
       }[authorized?(seeker: seeker, message_name: message_name)].call
     end
