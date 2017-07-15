@@ -44,7 +44,7 @@ module ActiveAuthorization
     attr_reader :seeker, :receiver
 
     def default_status
-      self.class::DEFAULT_STATUS
+      DEFAULT_STATUS
     end
 
     def responding_method(message_name)
