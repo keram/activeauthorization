@@ -2,11 +2,8 @@
 
 module ActiveAuthorization
   class Authorization
-    MOD_SEPARATOR = '::'
-    FALLBACK = -> { :default_status }
-
     def self.inherited(other)
-      ActiveAuthorization.tree[other.name.split(MOD_SEPARATOR).slice(1...-1)]
+      ActiveAuthorization.tree[other.name.split('::').slice(1...-1)]
                          .push(other)
     end
     private_class_method :inherited
@@ -47,7 +44,9 @@ module ActiveAuthorization
     end
 
     def responding_method(message_name)
-      methods.detect(FALLBACK) { |meth| meth.match?(message_name) }
+      methods.detect(-> { :default_status }) do |meth|
+        meth.match?(message_name)
+      end
     end
   end
 end
