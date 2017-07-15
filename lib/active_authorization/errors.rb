@@ -12,10 +12,4 @@ module ActiveAuthorization
       super()
     end
   end
-
-  class PolicyAccessDenied < AccessDenied
-  end
-
-  class AuthorizableAccessDenied < AccessDenied
-  end
 end

@@ -89,9 +89,10 @@ module ActiveAuthorization
       {
         true => -> { true },
         false => lambda {
-          raise AuthorizableAccessDenied.new(seeker: seeker,
-                                             receiver: self,
-                                             message_name: message_name)
+          raise AccessDenied.new(seeker: seeker,
+                                 receiver: self,
+                                 message_name: message_name,
+                                 type: :authorizable)
         }
       }[authorized?(seeker: seeker, message_name: message_name)].call
     end
