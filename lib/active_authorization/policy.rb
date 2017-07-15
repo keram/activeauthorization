@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# policy = Policy.new(current_user)
-# policy.authorize(article, 'create')
-
 module ActiveAuthorization
   class Policy
     def initialize(seeker:, factory:)
