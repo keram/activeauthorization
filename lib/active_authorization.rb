@@ -9,6 +9,10 @@ require 'active_authorization/policy'
 require 'active_authorization/authorizable'
 
 module ActiveAuthorization
+  def self.register(authorisation)
+    @tree[authorisation.name.split('::').slice(1...-1)].push(authorisation)
+  end
+
   def self.tree
     @tree
   end

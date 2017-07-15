@@ -2,9 +2,8 @@
 
 module ActiveAuthorization
   class Authorization
-    def self.inherited(other)
-      ActiveAuthorization.tree[other.name.split('::').slice(1...-1)]
-                         .push(other)
+    def self.inherited(authorization)
+      ActiveAuthorization.register(authorization)
     end
     private_class_method :inherited
 
