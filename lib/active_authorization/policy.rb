@@ -18,6 +18,7 @@ module ActiveAuthorization
           raise AccessDenied.new(seeker: seeker,
                                  receiver: receiver,
                                  message_name: message_name,
+                                 invoker: self,
                                  type: :policy)
         }
       }[authorized?(receiver: receiver, message_name: message_name)].call
@@ -36,7 +37,11 @@ module ActiveAuthorization
 
     def authorization_roles(*)
       raise NotImplemented,
-            'The method `authorization_roles(seeker:)` not implemented.'
+            'The method `authorization_roles(seeker:)` not implemented.' \
+            "\n" \
+            'Please define ' +
+            self.class.name.concat('#authorization_roles(seeker:)') +
+            ' method.'
     end
 
     def authorizations(receiver)
