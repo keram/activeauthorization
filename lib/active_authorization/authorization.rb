@@ -17,7 +17,7 @@ module ActiveAuthorization
     # @param message_name [String] The message to be send to the receiver
     # @return [Boolean]
     #   true or false based on the response from `#:message_name:?`
-    #   or default_status if method with name `message_nam` is not defined.
+    #   or #by_default? when method with name `message_name` is not defined.
     def authorized?(message_name)
       send(responding_method(message_name))
     end
@@ -46,16 +46,21 @@ module ActiveAuthorization
       }[authorized?(message_name)].call
     end
 
+    # Fallback method when specific query method `#:message_name:?`
+    # is not defined on authorization.
+    # This method is expected to be overwritten in a children.
+    #
+    # @return [Boolean] false
+    def by_default?
+      false
+    end
+
     private
 
     attr_reader :seeker, :receiver
 
-    def default_status
-      false
-    end
-
     def responding_method(message_name)
-      methods.detect(-> { :default_status }) do |meth|
+      methods.detect(-> { :by_default? }) do |meth|
         meth.match?(message_name)
       end
     end
