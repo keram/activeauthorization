@@ -22,11 +22,10 @@ module ActiveAuthorization
       # Let's have array of words
       # words = ['Alfa', 'Beta', 'Gamma', 'Delta']
       # namespace_words_combinations(words)
-      # returns array of strings:
-      # => ['Alfa::Beta::Gamma::Delta',
-      #     'Alfa::Beta::Gamma',
-      #     'Alfa::Beta',
-      #     'Alfa']
+      # => [['Alfa', 'Beta', 'Gamma', 'Delta'],
+      #     ['Alfa', 'Beta', 'Gamma'],
+      #     ['Alfa', 'Beta'],
+      #     ['Alfa']]
       def namespace_words_combinations(words)
         [].tap do |ary|
           words.length.times do |wi|
