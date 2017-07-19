@@ -8,10 +8,10 @@ module ActiveAuthorization
       @finder = finder
     end
 
-    def build(seeker:, receiver:, role:)
+    def build(user:, receiver:, role:)
       authorization_class(
         role.dup.concat(SUFFIX)
-      ).new(seeker: seeker, receiver: receiver)
+      ).new(user: user, receiver: receiver)
     end
 
     private

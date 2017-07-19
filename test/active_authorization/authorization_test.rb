@@ -7,7 +7,7 @@ module ActiveAuthorization
     attr_reader :authorization
 
     def initialize(*)
-      @authorization = Authorization.new(seeker: current_user, receiver: nil)
+      @authorization = Authorization.new(user: current_user, receiver: nil)
 
       super
     end

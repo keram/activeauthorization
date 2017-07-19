@@ -2,8 +2,8 @@
 
 module ActiveAuthorization
   class Policy
-    def initialize(seeker:, factory:)
-      @seeker = seeker
+    def initialize(user:, factory:)
+      @user = user
       @factory = factory
     end
 
@@ -15,7 +15,7 @@ module ActiveAuthorization
       {
         true => -> { true },
         false => lambda {
-          raise AccessDenied.new(seeker: seeker,
+          raise AccessDenied.new(user: user,
                                  receiver: receiver,
                                  message_name: message_name,
                                  invoker: self,
@@ -33,21 +33,21 @@ module ActiveAuthorization
 
     private
 
-    attr_reader :factory, :seeker
+    attr_reader :factory, :user
 
     def authorization_roles(*)
       raise NotImplemented,
-            'The method `authorization_roles(seeker:)` not implemented.' \
+            'The method `authorization_roles(user:)` not implemented.' \
             "\n" \
             'Please define ' +
-            self.class.name.concat('#authorization_roles(seeker:)') +
+            self.class.name.concat('#authorization_roles(user:)') +
             ' method.'
     end
 
     def authorizations(receiver)
-      authorization_roles(seeker: seeker).lazy.map do |role|
+      authorization_roles(user: user).lazy.map do |role|
         factory
-          .build(seeker: seeker, receiver: receiver, role: role)
+          .build(user: user, receiver: receiver, role: role)
       end
     end
   end

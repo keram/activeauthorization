@@ -19,7 +19,7 @@ module ActiveAuthorization
             assert_performance_linear TRESHOLD do |n|
               n.times do
                 #{sub}.authorized?(
-                  seeker: current_user,
+                  user: current_user,
                   message_name: #{action}_action
                 )
               end
@@ -31,7 +31,7 @@ module ActiveAuthorization
               n.times do
                 begin
                   #{sub}.authorize!(
-                    seeker: current_user,
+                    user: current_user,
                     message_name: #{action}_action
                   )
                 rescue ActiveAuthorization::AccessDenied
@@ -44,7 +44,7 @@ module ActiveAuthorization
             assert_performance_linear TRESHOLD do |n|
               n.times do
                 #{sub}.authorize(
-                  seeker: current_user,
+                  user: current_user,
                   message_name: #{action}_action
                 ) { }
               end

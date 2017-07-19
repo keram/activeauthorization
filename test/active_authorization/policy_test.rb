@@ -8,25 +8,25 @@ module ActiveAuthorization
 
   class AuthorizableObjectPolicy < Policy
     # :reek:UtilityFunction:
-    def authorization_roles(seeker:)
-      seeker.roles
+    def authorization_roles(user:)
+      user.roles
     end
   end
 
   module Some
     module Nested
       class AuthorizableObjectPolicy < Policy
-        def authorization_roles(seeker:)
-          seeker.roles
+        def authorization_roles(user:)
+          user.roles
         end
       end
     end
   end
 
   class PolicyTest < Minitest::Test
-    def test_that_seeker_can_not_have_a_cake
+    def test_that_user_can_not_have_a_cake
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -34,9 +34,9 @@ module ActiveAuthorization
                                  message_name: prohibited_action)
     end
 
-    def test_that_seeker_can_make_a_tea
+    def test_that_user_can_make_a_tea
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -47,7 +47,7 @@ module ActiveAuthorization
     def test_nested
       receiver = ::Some::Nested::AuthorizableObject.new
       policy = Some::Nested::AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -58,7 +58,7 @@ module ActiveAuthorization
     def test_multiple_roles
       receiver = ::Some::Nested::AuthorizableObject.new
       policy = Some::Nested::AuthorizableObjectPolicy.new(
-        seeker: User.new(%w[Visitor Customer Moderator]),
+        user: User.new(%w[Visitor Customer Moderator]),
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -68,7 +68,7 @@ module ActiveAuthorization
 
     def test_without_authorization_roles_implementation
       policy = AuthorizationRolesMissingPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
       assert_raises(NotImplemented) do
@@ -79,7 +79,7 @@ module ActiveAuthorization
 
     def test_authorize_bang_prohibited_action
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -91,7 +91,7 @@ module ActiveAuthorization
 
     def test_authorize_bang_authorized_action
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -101,7 +101,7 @@ module ActiveAuthorization
 
     def test_authorize_prohibited_action
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 
@@ -113,7 +113,7 @@ module ActiveAuthorization
 
     def test_authorize_authorized_action
       policy = AuthorizableObjectPolicy.new(
-        seeker: current_user,
+        user: current_user,
         factory: Factory.new(Finder.new(receiver.class))
       )
 

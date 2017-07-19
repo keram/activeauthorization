@@ -21,15 +21,15 @@ Include into Model you want to provide authorizations for lines:
 ```ruby
 include ActiveAuthorization::Authorizable
 
-def self.authorization_roles(seeker)
+def self.authorization_roles(user)
   # Here comes application or model specific role logic
-  # for example ``seeker.role``
+  # for example ``user.role``
   # returns CamelCaseString
 end
 
-def authorization_roles(seeker)
+def authorization_roles(user)
   # Instance specific role logic or forward to class
-  self.class.authorization_roles(seeker)
+  self.class.authorization_roles(user)
 end
 
 ```
@@ -65,7 +65,7 @@ module ActiveAuthorization
       class UserAuthorization < Authorization
         # User can update only himself
         def can_update?
-          seeker == receiver
+          user == receiver
         end
       end
     end
@@ -75,10 +75,10 @@ end
 
 In the controller action method, where you want the authorization performed, add:
 
-``receiver.authorize!(seeker, message_name)`` where:
+``receiver.authorize!(user, message_name)`` where:
 
 ``receiver`` is object that should receive message,
-``seeker`` is instance of object which wants the message to be send (typically this will be value of current_user).
+``user`` is instance of object which wants the message to be send (typically this will be value of current_user).
 ``message_name`` is message to be send to receiver as a String or Symbol
 
 

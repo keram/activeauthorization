@@ -3,12 +3,12 @@
 class AuthorizableObject
   include ActiveAuthorization::Authorizable
 
-  def self.authorization_roles(seeker:)
-    seeker.roles
+  def self.authorization_roles(user:)
+    user.roles
   end
 
-  def authorization_roles(seeker:)
-    self.class.authorization_roles(seeker: seeker)
+  def authorization_roles(user:)
+    self.class.authorization_roles(user: user)
   end
 end
 
@@ -24,8 +24,8 @@ module Some
     class AuthorizableObject
       include ActiveAuthorization::Authorizable
 
-      def self.authorization_roles(seeker:)
-        seeker.roles
+      def self.authorization_roles(user:)
+        user.roles
       end
     end
   end

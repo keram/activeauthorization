@@ -11,8 +11,8 @@ module ActiveAuthorization
   #    class Resource
   #      include ActiveAuthorization::Authorizable
   #
-  #      def authorization_roles(seeker:)
-  #        seeker.roles
+  #      def authorization_roles(user:)
+  #        user.roles
   #      end
   #
   #      def create
@@ -38,9 +38,9 @@ module ActiveAuthorization
   #
   # then we can send different authorization related messages to the resource
   #
-  #    resource.authorize!(seeker: user, message_name: 'create')  # => true
-  #    resource.authorized?(seeker: user, message_name: 'create') # => true
-  #    resource.authorized(seeker: user, message_name: 'create') do
+  #    resource.authorize!(user: user, message_name: 'create')  # => true
+  #    resource.authorized?(user: user, message_name: 'create') # => true
+  #    resource.authorized(user: user, message_name: 'create') do
   #      resource.create
   #    end # => execute the block passed in
   #
@@ -60,65 +60,65 @@ module ActiveAuthorization
 
     # == Usage
     #
-    #   resource.authorized? seeker: curren_user, message_name: 'update'
+    #   resource.authorized? user: curren_user, message_name: 'update'
     #
-    # @param seeker [?] the entity requesting message to be send.
+    # @param user [?] the entity requesting message to be send.
     # @param message_name [String] The message to be send to the receiver
-    # @return [Boolean] true or false based on the roles the seeker have
+    # @return [Boolean] true or false based on the roles the user have
     #         and the corresponding Authorizations.
-    #         When seeker have multiple roles eg authorizations, the method
+    #         When user have multiple roles eg authorizations, the method
     #         returns true if any of the authorizations return true.
-    def authorized?(seeker:, message_name:)
-      authorization_roles(seeker: seeker).any? do |role|
+    def authorized?(user:, message_name:)
+      authorization_roles(user: user).any? do |role|
         authorization_factory
-          .build(seeker: seeker, receiver: self, role: role)
+          .build(user: user, receiver: self, role: role)
           .authorized?(message_name)
       end
     end
 
     # == Usage
     #
-    #   resource.authorize! seeker: curren_user, message_name: 'update'
+    #   resource.authorize! user: curren_user, message_name: 'update'
     #
-    # @param seeker [?] the entity requesting message to be send.
+    # @param user [?] the entity requesting message to be send.
     # @param message_name [String] The message to be send to the receiver
     # @return [true, StandardError]
     #         true or raise ActiveAuthorization::AuthorizableAccessDenied
     #         exception
-    def authorize!(seeker:, message_name:)
+    def authorize!(user:, message_name:)
       {
         true => -> { true },
         false => lambda {
-          raise AccessDenied.new(seeker: seeker,
+          raise AccessDenied.new(user: user,
                                  receiver: self,
                                  message_name: message_name,
                                  type: :authorizable)
         }
-      }[authorized?(seeker: seeker, message_name: message_name)].call
+      }[authorized?(user: user, message_name: message_name)].call
     end
 
     # == Usage
     #
-    #    resource.authorized(seeker: user, message_name: 'create') do
+    #    resource.authorized(user: user, message_name: 'create') do
     #      resource.create
     #    end
     #
-    # @param seeker [?] the entity requesting message to be send.
+    # @param user [?] the entity requesting message to be send.
     # @param message_name [String] The message to be send to the receiver
     # @param block [Proc]
     # @return [nil, *] nil or content of the block passed in
-    def authorize(seeker:, message_name:, &block)
+    def authorize(user:, message_name:, &block)
       {
         true => block,
         false => -> {}
-      }[authorized?(seeker: seeker, message_name: message_name)].call
+      }[authorized?(user: user, message_name: message_name)].call
     end
 
     protected
 
     def authorization_roles(*)
       raise NotImplemented,
-            'The method `authorization_roles(seeker:)` not implemented.'
+            'The method `authorization_roles(user:)` not implemented.'
     end
 
     def authorization_factory

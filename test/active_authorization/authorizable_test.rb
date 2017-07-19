@@ -7,11 +7,11 @@ module ActiveAuthorization
     def test_authorize_bang
       [AuthorizableObject, AuthorizableObject.new].each do |subject|
         assert_raises(AccessDenied) do
-          subject.authorize!(seeker: current_user,
+          subject.authorize!(user: current_user,
                              message_name: prohibited_action)
         end
 
-        assert subject.authorize!(seeker: current_user,
+        assert subject.authorize!(user: current_user,
                                   message_name: authorized_action)
       end
     end
@@ -19,11 +19,11 @@ module ActiveAuthorization
     def test_authorize_bang_on_subclass
       [AuthorizableSubObject, AuthorizableSubObject.new].each do |subject|
         assert_raises(AccessDenied) do
-          subject.authorize!(seeker: current_user,
+          subject.authorize!(user: current_user,
                              message_name: prohibited_action)
         end
 
-        assert subject.authorize!(seeker: current_user,
+        assert subject.authorize!(user: current_user,
                                   message_name: authorized_action)
       end
     end
@@ -32,7 +32,7 @@ module ActiveAuthorization
       [NoAuthorizationRolesObject, NoAuthorizationRolesObject.new]
         .each do |subject|
         assert_raises(NotImplemented) do
-          subject.authorize!(seeker: current_user,
+          subject.authorize!(user: current_user,
                              message_name: authorized_action)
         end
       end
@@ -40,11 +40,11 @@ module ActiveAuthorization
 
     def test_authorize
       [AuthorizableObject, AuthorizableObject.new].each do |subject|
-        subject.authorize(seeker: current_user,
+        subject.authorize(user: current_user,
                           message_name: prohibited_action) { raise }
 
         assert_equal 'a',
-                     subject.authorize(seeker: current_user,
+                     subject.authorize(user: current_user,
                                        message_name: authorized_action) { 'a' }
       end
     end

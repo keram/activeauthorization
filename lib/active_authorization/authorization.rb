@@ -7,10 +7,10 @@ module ActiveAuthorization
     end
     private_class_method :inherited
 
-    # @param seeker [?] the entity requesting message to be send.
+    # @param user [?] the entity requesting message to be send.
     # @param receiver [?] receiver of the message
-    def initialize(seeker:, receiver:)
-      @seeker = seeker
+    def initialize(user:, receiver:)
+      @user = user
       @receiver = receiver
     end
 
@@ -29,7 +29,7 @@ module ActiveAuthorization
       {
         true => -> { true },
         false => lambda {
-          raise AccessDenied.new(seeker: seeker,
+          raise AccessDenied.new(user: user,
                                  receiver: receiver,
                                  message_name: message_name)
         }
@@ -57,7 +57,7 @@ module ActiveAuthorization
 
     private
 
-    attr_reader :seeker, :receiver
+    attr_reader :user, :receiver
 
     def responding_method(message_name)
       methods.detect(-> { :by_default? }) do |meth|

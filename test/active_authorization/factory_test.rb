@@ -9,7 +9,7 @@ module ActiveAuthorization
       factory = Factory.new(finder)
       expected = ::Authorizations::AuthorizableObject::CustomerAuthorization
       assert_instance_of expected,
-                         factory.build(seeker: current_user,
+                         factory.build(user: current_user,
                                        receiver: AuthorizableSubObject,
                                        role: current_user.roles.first)
     end
@@ -19,7 +19,7 @@ module ActiveAuthorization
       factory = Factory.new(finder)
       expected = ::Authorizations::AuthorizableSubObject::AdminAuthorization
       assert_instance_of expected,
-                         factory.build(seeker: current_user,
+                         factory.build(user: current_user,
                                        receiver: AuthorizableSubObject,
                                        role: 'Admin')
     end
@@ -32,7 +32,7 @@ module ActiveAuthorization
       expected = ::Authorizations::Some::Nested::VigilanteAuthorization
       assert_instance_of expected,
                          factory.build(
-                           seeker: user,
+                           user: user,
                            receiver: ::Some::Nested::AuthorizableObject,
                            role: user.roles.first
                          )
