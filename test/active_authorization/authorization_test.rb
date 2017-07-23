@@ -30,6 +30,17 @@ module ActiveAuthorization
       assert authorization.authorized?(authorized_action)
     end
 
+    def test_message_name_clash
+      authorization.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
+        def something_else?
+          true
+        end
+      RUBY
+
+      assert authorization.authorized?('something_else')
+      refute authorization.authorized?('something')
+    end
+
     def test_authorize_bang_prohibited_action
       assert_raises(AccessDenied) do
         authorization.authorize!(prohibited_action)

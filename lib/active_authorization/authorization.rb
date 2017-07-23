@@ -60,8 +60,8 @@ module ActiveAuthorization
     attr_reader :user, :receiver
 
     def responding_method(message_name)
-      methods.detect(-> { :by_default? }) do |meth|
-        meth.match?(message_name)
+      public_methods.detect(-> { :by_default? }) do |method_name|
+        method_name.slice(0...-1).eql?(message_name)
       end
     end
   end
