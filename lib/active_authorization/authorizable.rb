@@ -82,7 +82,7 @@ module ActiveAuthorization
     #
     # @param user [?] the entity requesting message to be send.
     # @param message_name [String] The message to be send to the receiver
-    # @return [true, StandardError]
+    # @return [true, AccessDenied]
     #         true or raise ActiveAuthorization::AuthorizableAccessDenied
     #         exception
     def authorize!(user:, message_name:)
