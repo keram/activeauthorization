@@ -1,13 +1,13 @@
 # ActiveAuthorization
 
-Simple, elegant and fully customizable authorizations for models in the language we all love; Ruby.
+Simple, elegant, role based authorization library  for models in the language we all love: Ruby.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'active_authorization', github: 'keram/active_authorization', branch: '0-1-stable'
+gem 'activeauthorization', github: 'keram/activeauthorization', branch: '0-1-stable'
 ```
 
 And then execute:
