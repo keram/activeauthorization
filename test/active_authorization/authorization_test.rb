@@ -28,6 +28,7 @@ module ActiveAuthorization
       RUBY
 
       assert authorization.authorized?(authorized_action)
+      assert authorization.authorized?(authorized_action.to_sym)
     end
 
     def test_message_name_clash

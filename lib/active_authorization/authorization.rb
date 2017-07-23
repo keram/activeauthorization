@@ -19,7 +19,7 @@ module ActiveAuthorization
     #   true or false based on the response from `#:message_name:?`
     #   or #by_default? when method with name `message_name` is not defined.
     def authorized?(message_name)
-      send(responding_method(message_name))
+      send(responding_method(message_name.to_s))
     end
 
     # @param message_name [String] The message to be send to the receiver
