@@ -6,8 +6,8 @@ module ActiveAuthorization
     MOD_SEPARATOR = '::'
 
     class << self
-      def search_scope(cls)
-        namespace_combinations(class_ancestors(cls))
+      def search_scope(klass)
+        namespace_combinations(class_ancestors(klass))
           .push([]).flat_map { |words| ActiveAuthorization.tree[words] }
       end
 
@@ -34,20 +34,22 @@ module ActiveAuthorization
         end
       end
 
-      def class_ancestors(cls)
-        cls
+      def class_ancestors(klass)
+        klass
           .ancestors
           .select { |ancestor| ancestor.is_a? Class }
           .reject { |ancestor| [Object, BasicObject].include? ancestor }
       end
     end
 
-    def initialize(receiver_class)
-      @search_scope = self.class.search_scope(receiver_class)
+    def initialize(klass)
+      @search_scope = self.class.search_scope(klass)
     end
 
-    def find(class_name)
-      @search_scope.detect(FALLBACK) { |cls| cls.name.include?(class_name) }
+    def find(authorization_class_name)
+      @search_scope.detect(FALLBACK) do |klass|
+        klass.name.include?(authorization_class_name)
+      end
     end
   end
 end
